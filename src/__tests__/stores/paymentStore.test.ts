@@ -89,4 +89,16 @@ describe('paymentStore', () => {
     expect(s.isSdkReady).toBe(true);
     expect(s.config).toEqual(mockConfig); // no toca config
   });
+
+  it('setStatus: cambia solo el status', () => {
+    usePaymentStore.getState().setStatus('processing');
+    expect(usePaymentStore.getState().status).toBe('processing');
+  });
+
+  it('setSelectedMethod: almacena el método seleccionado', () => {
+    usePaymentStore.getState().setSelectedMethod('card');
+    expect(usePaymentStore.getState().selectedMethod).toBe('card');
+    usePaymentStore.getState().setSelectedMethod(null);
+    expect(usePaymentStore.getState().selectedMethod).toBeNull();
+  });
 });

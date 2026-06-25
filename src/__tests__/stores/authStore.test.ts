@@ -82,4 +82,18 @@ describe('authStore', () => {
     expect('accessToken' in persisted).toBe(false);
     expect(persisted.user).toEqual(mockUser);
   });
+
+  it('clearStorage: elimina la clave del sessionStorage vía removeItem del storage custom', () => {
+    sessionStorage.setItem('mp_auth', JSON.stringify({ user: mockUser, isAuth: true }));
+    useAuthStore.persist.clearStorage();
+    expect(sessionStorage.getItem('mp_auth')).toBeNull();
+  });
+
+  it('storage.getItem devuelve null cuando la clave no existe en sessionStorage', () => {
+    sessionStorage.removeItem('mp_auth');
+    // Al hidratar el store desde un sessionStorage vacío no debe lanzar
+    expect(() => useAuthStore.persist.rehydrate()).not.toThrow();
+    // El estado persiste correctamente como null al no encontrar la clave
+    expect(useAuthStore.getState().user).toBeNull();
+  });
 });
